@@ -6,19 +6,26 @@ class Bindings(object):
 
     def bind(self, klass):
         self._verify_is_class(klass)
+        self._add_binding(klass, klass)
 
-    def bind_to(self, class_or_string, subject):
+    def bind_to(self, class_or_string, bound_object):
         self._verify_is_class_or_string(class_or_string)
+        self._add_binding(class_or_string, bound_object)
+    
+    def _add_binding(self, class_or_string, bound_object):
+        if class_or_string in self._bindings_dict:
+             raise ValueError("{} is already bound".format(class_or_string))
+        self._bindings_dict[class_or_string] = bound_object
 
     @staticmethod
     def _verify_is_class(klass):
         if not isclass(klass):
-             raise ValueError("Argument of bind method should be a class")
+             raise TypeError("Argument of bind method should be a class")
 
     @classmethod
     def _verify_is_class_or_string(cls, class_or_string):
         if not isclass(class_or_string) and not cls._is_string(class_or_string):
-             raise ValueError("Argument of bind_to method should be a class or a string")
+             raise TypeError("Argument of bind_to method should be a class or a string")
     @classmethod
     def _is_string(cls, class_or_string):
         return isinstance(class_or_string, str)
