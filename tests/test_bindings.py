@@ -1,5 +1,5 @@
 import unittest
-from zanna import Bindings
+from zanna._default_bindings import _DefaultBindings
 from unittest.mock import MagicMock
 
 
@@ -9,9 +9,9 @@ class DummyClass():
 def dummyfunc():
     pass
 
-class TestBindings(unittest.TestCase):
+class TestDefaultBindings(unittest.TestCase):
     def setUp(self):
-        self.bindings = Bindings()
+        self.bindings = _DefaultBindings()
     def test_can_bind_nonclass_raises(self):
         self.assertRaises(TypeError, self.bindings.bind, "")
         self.assertRaises(TypeError, self.bindings.bind_to, 1, "")
