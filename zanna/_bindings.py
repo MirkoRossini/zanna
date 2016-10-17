@@ -32,3 +32,4 @@ class Bindings(object):
     @classmethod
     def _is_string(cls, class_or_string: Union[type, str]) -> None:
         return isinstance(class_or_string, str)
+
