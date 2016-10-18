@@ -4,7 +4,7 @@ from inspect import isfunction, isclass
 import abc
 
 def _needs_spec(bound_object: Any) -> bool:
-    return isclass(bound_object) or isfunction(bound_object)
+    return isclass(bound_object)
 
 class BindingSpec(metaclass=abc.ABCMeta):
 
@@ -33,6 +33,7 @@ class InstanceBindingSpec(BindingSpec):
     def __init__(self, bound_object: Any):
         if bound_object is None:
             raise TypeError("Binding None is not allowed")
+        print(bound_object, isfunction(bound_object) )
         self._spec = None
         if _needs_spec(bound_object):
             raise TypeError(

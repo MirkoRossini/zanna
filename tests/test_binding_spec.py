@@ -7,12 +7,12 @@ class DummyClass(object):
     def __init__(self, value):
         self.value = value
 
+TEST_CALLABLE = lambda x: x + 500
 
 class TestInstanceBindingSpec(TestCase):
     TEST_STRING = "testtest"
     TEST_INT = 9999
     TEST_DUMMY_INSTANCE = DummyClass(TEST_STRING)
-    TEST_CALLABLE = lambda x: x + 500
 
     def test_instance_binding_spec(self):
         bspec = InstanceBindingSpec(self.TEST_STRING)
@@ -35,5 +35,6 @@ class TestInstanceBindingSpec(TestCase):
             bspec = InstanceBindingSpec(None)
 
     def test_callable_binding_spec(self):
-        bspec = InstanceBindingSpec(self.TEST_CALLABLE)
+        bspec = InstanceBindingSpec(TEST_CALLABLE)
+        print (bspec.get_instance())
         assert bspec.get_instance()(500) == 1000
