@@ -31,6 +31,8 @@ class BindingSpec(metaclass=abc.ABCMeta):
 
 class InstanceBindingSpec(BindingSpec):
     def __init__(self, bound_object: Any):
+        if bound_object is None:
+            raise TypeError("Binding None is not allowed")
         self._spec = None
         if _needs_spec(bound_object):
             raise TypeError(

@@ -29,3 +29,11 @@ class TestInstanceBindingSpec(TestCase):
     def test_class_binding_spec_raises(self):
         with pytest.raises(TypeError):
             bspec = InstanceBindingSpec(DummyClass)
+
+    def test_none_binding_spec_raises(self):
+        with pytest.raises(TypeError):
+            bspec = InstanceBindingSpec(None)
+
+    def test_callable_binding_spec(self):
+        bspec = InstanceBindingSpec(self.TEST_CALLABLE)
+        assert bspec.get_instance()(500) == 1000
