@@ -3,7 +3,7 @@ from abc import ABCMeta, abstractmethod
 
 
 
-class Bindings(metaclass=ABCMeta):
+class Binder(metaclass=ABCMeta):
     @abstractmethod
     def bind(self, klass: type) -> None:
         pass

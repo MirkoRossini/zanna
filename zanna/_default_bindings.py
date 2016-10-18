@@ -1,10 +1,10 @@
 
 from inspect import (isclass, isfunction)
 from typing import Union, Type, Text, Any
-from ._bindings import Bindings
+from ._bindings import Binder
 
 
-class _DefaultBindings(Bindings):
+class _DefaultBinder(Binder):
     def __init__(self):
         self._bindings_dict = {}
 
