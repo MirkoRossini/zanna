@@ -2,7 +2,7 @@
 from inspect import (isclass, isfunction)
 from typing import Union, Any
 from ._binder import Binder
-
+from ._binding import Binding
 
 class _DefaultBinder(Binder):
     def __init__(self):
@@ -15,6 +15,9 @@ class _DefaultBinder(Binder):
     def bind_to(self, class_or_string: Union[type, str], bound_object: Any) -> None:
         self._verify_is_class_or_string(class_or_string)
         self._add_binding(class_or_string, bound_object)
+
+    def get_binding(self, class_or_string: Union[type, str]) -> Binding:
+        return None
     
     def _add_binding(self, class_or_string, bound_object: Any) -> None:
         if class_or_string in self._bindings_dict:

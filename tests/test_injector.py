@@ -12,6 +12,11 @@ class TestBinder(unittest.TestCase):
         module.side_effect = self._called_with_binder
         Injector(module)
         assert module.called
+
+    def test_get_simple_instance(self):
+        i = Injector(lambda binder: binder.bind_to("thing", 3))
+        thing = i.get_instance("thing")
+        assert thing == 3
       
     """
     def test_get_instance(self):
