@@ -6,6 +6,7 @@ import abc
 def _needs_spec(bound_object: Any) -> bool:
     return isclass(bound_object)
 
+
 class BindingSpec(metaclass=abc.ABCMeta):
 
     def has_instance(self) -> bool:
