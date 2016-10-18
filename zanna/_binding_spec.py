@@ -31,19 +31,17 @@ class BindingSpec(metaclass=abc.ABCMeta):
 
 class InstanceBindingSpec(BindingSpec):
     def __init__(self, bound_object: Any):
-        if bound_object is None:
-            raise TypeError("Binding None is not allowed")
-        print(bound_object, isfunction(bound_object) )
-        self._spec = None
-        if _needs_spec(bound_object):
-            raise TypeError(
-                "{} should only be used with object instances.".format(
-                    self.__class__.__name__))
-        else:
-            self._instance = bound_object
+        self._validate_object(bound_object)
+        self._instance = bound_object
 
     def get_instance(self):
         return self._instance
-            
 
-
+    @staticmethod
+    def _validate_object(bound_object: Any):
+        if bound_object is None:
+            raise TypeError("Binding None is not allowed")
+        if _needs_spec(bound_object):
+            raise TypeError(
+                "{} should only be used with object instances and unbound callables.".format(
+                    InstanceBindingSpec.__name__))
