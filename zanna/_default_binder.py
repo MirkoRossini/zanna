@@ -1,7 +1,7 @@
 
 from inspect import (isclass, isfunction)
-from typing import Union, Type, Text, Any
-from ._bindings import Binder
+from typing import Union, Any
+from ._binder import Binder
 
 
 class _DefaultBinder(Binder):
@@ -22,7 +22,7 @@ class _DefaultBinder(Binder):
         self._bindings_dict[class_or_string] = bound_object
 
     @staticmethod
-    def _verify_is_class(klass: Type) -> None:
+    def _verify_is_class(klass: type) -> None:
         if not isclass(klass):
              raise TypeError("Argument of bind method should be a class")
 
