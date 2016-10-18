@@ -1,4 +1,4 @@
-from inspect import (isclass)
+from inspect import isclass
 
 from typing import Union, Any
 
