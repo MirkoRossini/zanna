@@ -2,7 +2,6 @@ from typing import Union, Any
 from abc import ABCMeta, abstractmethod
 
 
-
 class Binder(metaclass=ABCMeta):
     @abstractmethod
     def bind(self, klass: type) -> None:
