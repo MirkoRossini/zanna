@@ -9,6 +9,7 @@ def _needs_spec(bound_object: Any) -> bool:
 
 class BindingSpec(metaclass=abc.ABCMeta):
 
+    @abc.abstractmethod
     def has_instance(self) -> bool:
         """
         Returns true if the binding spec have an 
@@ -16,6 +17,7 @@ class BindingSpec(metaclass=abc.ABCMeta):
         """
         raise NotImplementedError()
 
+    @abc.abstractmethod
     def get_instance(self) -> Any:
         """
         Returns the instance associated with the BindingSpec.
@@ -24,6 +26,7 @@ class BindingSpec(metaclass=abc.ABCMeta):
         """
         raise NotImplementedError()
     
+    @abc.abstractmethod
     def construct_instance(keyword_arguments: Dict[str, object]) -> Any:
         """
         Constructs an instance of the bound object given a map of arguments
@@ -37,6 +40,13 @@ class InstanceBindingSpec(BindingSpec):
 
     def get_instance(self):
         return self._instance
+
+    def construct_instance(keyword_arguments: Dict[str, object]) -> Any:
+        raise TypeError("{} doesn't need to construct instances".format(
+                    InstanceBindingSpec.__name__))
+
+    def has_instance(self) -> bool:
+        return True
 
     @staticmethod
     def _validate_object(bound_object: Any):
