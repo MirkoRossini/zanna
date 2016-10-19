@@ -15,4 +15,8 @@ class TestClassBindingSpec(unittest.TestCase):
            ClassBindingSpec("")
         with pytest.raises(TypeError):
            ClassBindingSpec(DummyClass(""))
-         
+    
+    def test_has_instance_is_null_at_beginning(self):
+        assert not ClassBindingSpec(DummyClass).has_instance()
+        with pytest.raises(TypeError):
+           ClassBindingSpec(DummyClass).get_instance()
