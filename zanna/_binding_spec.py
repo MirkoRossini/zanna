@@ -2,7 +2,7 @@ from typing import Any, Dict, Iterable
 from inspect import isclass
 import abc
 
-from zanna._argument_spec import ArgumentSpec
+from ._argument_spec import ArgumentSpec
 
 
 def _needs_spec(bound_object: Any) -> bool:
@@ -28,7 +28,7 @@ class BindingSpec(metaclass=abc.ABCMeta):
         raise NotImplementedError()
 
     @abc.abstractmethod
-    def construct_instance(keyword_arguments: Dict[str, object]) -> Any:
+    def construct_instance(self, keyword_arguments: Dict[str, object]) -> Any:
         """
         Constructs an instance of the bound object given a map of arguments
         """

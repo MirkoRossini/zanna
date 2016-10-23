@@ -2,8 +2,8 @@ from typing import Any, Dict, Iterable, Callable
 from inspect import isclass, signature, Signature
 
 from ._binding_spec import BindingSpec
-from zanna._argument_spec import ArgumentSpec
-from zanna._binding import Binding
+from ._argument_spec import ArgumentSpec
+from ._binding import Binding
 
 def get_argument_specs_for_method(method: Callable):
     return [ArgumentSpec(arg.annotation if arg.annotation != Signature.empty else None, name)
@@ -47,8 +47,8 @@ class ClassBindingSpec(BindingSpec):
             ("{} doesn't have ready to use instances, "
              "they need to be constructed each time").format(self.__class__.__name__))
 
-    def construct_instance(self, kwargs: Dict[str, object]) -> Any:
-        return self._klass(**kwargs)
+    def construct_instance(self, keyword_arguments: Dict[str, object]) -> Any:
+        return self._klass(**keyword_arguments)
 
     def get_argument_specs(self) -> Iterable[Binding]:
         return self._argument_specs
