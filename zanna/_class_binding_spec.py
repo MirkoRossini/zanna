@@ -11,10 +11,9 @@ def get_argument_specs_for_method(method: Callable):
             if name != 'self']
 
 def get_argument_specs_for_class(klass: type):
-    init = getattr(klass, '__init__')
-    if init is not None:
-        return get_argument_specs_for_method(init)
-    return []
+    if not isinstance(klass, type):
+        raise TypeError("klass should be a type")
+    return get_argument_specs_for_method(klass)
 
 class ClassBindingSpec(BindingSpec):
     """
@@ -23,6 +22,7 @@ class ClassBindingSpec(BindingSpec):
 
     def __init__(self, klass: type):
         self._validate_argument(klass)
+        self._klass = klass
         self._argument_specs = get_argument_specs_for_class(klass)
 
     @staticmethod
@@ -48,7 +48,7 @@ class ClassBindingSpec(BindingSpec):
              "they need to be constructed each time").format(self.__class__.__name__))
 
     def construct_instance(self, kwargs: Dict[str, object]) -> Any:
-        pass
+        return self._klass(**kwargs)
 
     def get_argument_specs(self) -> Iterable[Binding]:
         return self._argument_specs

@@ -8,6 +8,19 @@ class DummyClass(object):
     def __init__(self, value):
         self.value = value
 
+    def __eq__(self, other):
+        if not isinstance(other, DummyClass):
+            raise Exception()
+        return other.value == self.value
+
+class DummyClassEmpty(object):
+    def __init__(self):
+        pass
+
+    def __eq__(self, other):
+        if not isinstance(other, DummyClassEmpty):
+            raise Exception()
+        return True
 
 class TestClassBindingSpec(unittest.TestCase):
     def test_binding_instance_raises(self):
@@ -23,10 +36,20 @@ class TestClassBindingSpec(unittest.TestCase):
         with pytest.raises(TypeError):
            ClassBindingSpec(DummyClass).get_instance()
 
-    def test_get_binding_specs(self):
+    def test_get_argument_specs(self):
         class_binding_spec = ClassBindingSpec(DummyClass)
         assert class_binding_spec.get_argument_specs() == [ArgumentSpec(None, "value")]
 
-    def test_get_argument_specs(self):
+    def test_get_argument_specs_specs_empty(self):
+        class_binding_spec = ClassBindingSpec(DummyClassEmpty)
+        assert class_binding_spec.get_argument_specs() == []
+
+    def test_get_argument_specs_specs_empty(self):
+        assert ClassBindingSpec(DummyClassEmpty).construct_instance({}) == DummyClassEmpty()
+        with pytest.raises(TypeError):
+            ClassBindingSpec(DummyClass).construct_instance({})
+        assert ClassBindingSpec(DummyClass).construct_instance({"value": 3}) == DummyClass(3)
+
+    def test_get_instance(self):
         with pytest.raises(TypeError):
            ClassBindingSpec(DummyClass).get_instance()
