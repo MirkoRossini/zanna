@@ -1,14 +1,15 @@
-
-from typing import Any, Dict
-from inspect import isfunction, isclass
+from typing import Any, Dict, Iterable
+from inspect import isclass
 import abc
+
+from zanna._argument_spec import ArgumentSpec
+
 
 def _needs_spec(bound_object: Any) -> bool:
     return isclass(bound_object)
 
 
 class BindingSpec(metaclass=abc.ABCMeta):
-
     @abc.abstractmethod
     def has_instance(self) -> bool:
         """
@@ -25,7 +26,7 @@ class BindingSpec(metaclass=abc.ABCMeta):
         it raises a 
         """
         raise NotImplementedError()
-    
+
     @abc.abstractmethod
     def construct_instance(keyword_arguments: Dict[str, object]) -> Any:
         """
@@ -33,7 +34,17 @@ class BindingSpec(metaclass=abc.ABCMeta):
         """
         pass
 
+    @abc.abstractmethod
+    def get_argument_specs(self) -> Iterable[ArgumentSpec]:
+        """
+        Returns the bindings necessary to construct the instance.
+        """
+        pass
+
+
 class InstanceBindingSpec(BindingSpec):
+
+
     def __init__(self, bound_object: Any):
         self._validate_object(bound_object)
         self._instance = bound_object
@@ -43,7 +54,7 @@ class InstanceBindingSpec(BindingSpec):
 
     def construct_instance(keyword_arguments: Dict[str, object]) -> Any:
         raise TypeError("{} doesn't need to construct instances".format(
-                    InstanceBindingSpec.__name__))
+            InstanceBindingSpec.__name__))
 
     def has_instance(self) -> bool:
         return True
@@ -56,3 +67,7 @@ class InstanceBindingSpec(BindingSpec):
             raise TypeError(
                 "{} should only be used with object instances and unbound callables.".format(
                     InstanceBindingSpec.__name__))
+
+    def get_argument_specs(self) -> Iterable[ArgumentSpec]:
+        raise TypeError("{} doesn't have any argument specs".format(
+            InstanceBindingSpec.__name__))
