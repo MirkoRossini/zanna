@@ -1,11 +1,13 @@
 from typing import Any, Dict, Iterable, Callable
 from inspect import signature, Signature
+
 from ._argument_spec import ArgumentSpec
 from ._binding_spec import BindingSpec
 
 
 def get_argument_specs_for_callable(callable_obj: Callable):
-    return [ArgumentSpec(arg.annotation if arg.annotation != Signature.empty else None, name)
+    return [ArgumentSpec(
+        arg.annotation if arg.annotation != Signature.empty else None, name)
             for name, arg in signature(callable_obj).parameters.items()
             if name != 'self']
 
@@ -29,7 +31,7 @@ class ProviderBindingSpec(BindingSpec):
 
     def has_instance(self):
         """
-        Instances must be constructed each time, 
+        Instances must be constructed each time,
         so we will never have an instance ready to be retrieved
         """
         return False
@@ -40,11 +42,11 @@ class ProviderBindingSpec(BindingSpec):
         """
         raise TypeError(
             ("{} doesn't have ready to use instances, "
-             "they need to be constructed each time").format(self.__class__.__name__))
+             "they need to be constructed each time").format(
+                self.__class__.__name__))
 
     def construct_instance(self, keyword_arguments: Dict[str, object]) -> Any:
         return self._provider(**keyword_arguments)
 
     def get_argument_specs(self) -> Iterable[ArgumentSpec]:
         return self._argument_specs
-

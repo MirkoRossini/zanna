@@ -1,10 +1,12 @@
 from typing import Callable, Iterable, Union, Any
+
 from ._default_binder import _DefaultBinder
 from ._binder import Binder
 
 
 class Injector(object):
-    def __init__(self, module: Callable[[Binder], None], *othermodules: Iterable[Callable[[Binder], None]]):
+    def __init__(self, module: Callable[[Binder], None],
+                 *othermodules: Iterable[Callable[[Binder], None]]):
         self._binder = _DefaultBinder()
         module(self._binder)
         for othermodule in othermodules:
@@ -19,7 +21,9 @@ class Injector(object):
 
     def _construct_instance(self, binding_spec):
         argument_specs = binding_spec.get_argument_specs()
-        return binding_spec.construct_instance({arg.name: self._get_instance_for_argument_spec(arg) for arg in argument_specs})
+        return binding_spec.construct_instance(
+            {arg.name: self._get_instance_for_argument_spec(arg) for arg in
+             argument_specs})
 
     def _get_instance_for_argument_spec(self, argument_spec):
         if argument_spec.type is None:

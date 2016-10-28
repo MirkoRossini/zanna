@@ -13,7 +13,7 @@ class BindingSpec(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def has_instance(self) -> bool:
         """
-        Returns true if the binding spec have an 
+        Returns true if the binding spec have an
         instance ready to be returned, False otherwise.
         """
         raise NotImplementedError()
@@ -22,8 +22,6 @@ class BindingSpec(metaclass=abc.ABCMeta):
     def get_instance(self) -> Any:
         """
         Returns the instance associated with the BindingSpec.
-        If the instance is not ready (i.e. it's None)
-        it raises a 
         """
         raise NotImplementedError()
 
@@ -63,7 +61,8 @@ class InstanceBindingSpec(BindingSpec):
             raise TypeError("Binding None is not allowed")
         if _needs_spec(bound_object):
             raise TypeError(
-                "{} should only be used with object instances and unbound callables.".format(
+                ("{} should only be used with object "
+                 "instances and unbound callables.").format(
                     InstanceBindingSpec.__name__))
 
     def get_argument_specs(self) -> Iterable[ArgumentSpec]:

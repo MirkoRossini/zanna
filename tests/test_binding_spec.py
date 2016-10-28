@@ -1,13 +1,18 @@
-
 from unittest import TestCase
+
+import pytest
+
 from zanna._binding_spec import InstanceBindingSpec
-import pytest 
+
 
 class DummyClass(object):
     def __init__(self, value):
         self.value = value
 
-TEST_CALLABLE = lambda x: x + 500
+
+def TEST_CALLABLE(x):
+    return x + 500
+
 
 class TestInstanceBindingSpec(TestCase):
     TEST_STRING = "testtest"
@@ -28,11 +33,11 @@ class TestInstanceBindingSpec(TestCase):
 
     def test_class_binding_spec_raises(self):
         with pytest.raises(TypeError):
-            bspec = InstanceBindingSpec(DummyClass)
+            InstanceBindingSpec(DummyClass)
 
     def test_none_binding_spec_raises(self):
         with pytest.raises(TypeError):
-            bspec = InstanceBindingSpec(None)
+            InstanceBindingSpec(None)
 
     def test_argspec_methods_raise(self):
         bspec = InstanceBindingSpec(3)
@@ -43,5 +48,5 @@ class TestInstanceBindingSpec(TestCase):
 
     def test_callable_binding_spec(self):
         bspec = InstanceBindingSpec(TEST_CALLABLE)
-        print (bspec.get_instance())
+        print(bspec.get_instance())
         assert bspec.get_instance()(500) == 1000

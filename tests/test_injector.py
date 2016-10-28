@@ -4,24 +4,28 @@ from unittest.mock import MagicMock
 from zanna import Injector
 from zanna import Binder
 
-
 THING_VALUE = 3
 OTHERTHING_VALUE = 30
+
 
 class ThingConsumer:
     def __init__(self, thing):
         assert thing == THING_VALUE
 
+
 class ClassConsumer:
     def __init__(self, thing_consumer: ThingConsumer):
         assert isinstance(thing_consumer, ThingConsumer)
 
+
 class JustAClass:
     pass
+
 
 def provider(otherthing):
     assert otherthing == OTHERTHING_VALUE
     return THING_VALUE
+
 
 class TestInjector(unittest.TestCase):
     def test_init_empty(self):
@@ -65,6 +69,7 @@ class TestInjector(unittest.TestCase):
         def module(binder):
             binder.bind(ThingConsumer)
             binder.bind_to("thing", THING_VALUE)
+
         i = Injector(module)
         thing_consumer = i.get_instance(ThingConsumer)
         assert thing_consumer is not None
@@ -75,6 +80,7 @@ class TestInjector(unittest.TestCase):
             binder.bind(ThingConsumer)
             binder.bind(ClassConsumer)
             binder.bind_to("thing", THING_VALUE)
+
         i = Injector(module)
         class_consumer = i.get_instance(ClassConsumer)
         assert class_consumer is not None
@@ -85,6 +91,7 @@ class TestInjector(unittest.TestCase):
             binder.bind_to("thing_consumer", ThingConsumer)
             binder.bind(ClassConsumer)
             binder.bind_to("thing", THING_VALUE)
+
         i = Injector(module)
         class_consumer = i.get_instance(ClassConsumer)
         assert class_consumer is not None
@@ -95,6 +102,7 @@ class TestInjector(unittest.TestCase):
             binder.bind(ThingConsumer)
             binder.bind_provider("thing", provider)
             binder.bind_to("otherthing", OTHERTHING_VALUE)
+
         i = Injector(module)
         thing_consumer = i.get_instance(ThingConsumer)
         assert thing_consumer is not None
@@ -103,4 +111,3 @@ class TestInjector(unittest.TestCase):
     @staticmethod
     def _called_with_binder(binder):
         assert isinstance(binder, Binder)
-

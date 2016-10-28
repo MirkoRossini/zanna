@@ -31,7 +31,7 @@ class ClassBindingSpec(BindingSpec):
 
     def has_instance(self):
         """
-        Instances must be constructed each time, 
+        Instances must be constructed each time,
         so we will never have an instance ready to be retrieved
         """
         return False
@@ -42,7 +42,8 @@ class ClassBindingSpec(BindingSpec):
         """
         raise TypeError(
             ("{} doesn't have ready to use instances, "
-             "they need to be constructed each time").format(self.__class__.__name__))
+             "they need to be constructed each time").format(
+                self.__class__.__name__))
 
     def construct_instance(self, keyword_arguments: Dict[str, object]) -> Any:
         return self._klass(**keyword_arguments)

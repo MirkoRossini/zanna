@@ -50,11 +50,12 @@ class TestDefaultBinder(unittest.TestCase):
     def test_raises_if_not_bound(self):
         self.assertRaises(ValueError, self.binder.get_binding, "instance")
         self.assertRaises(ValueError, self.binder.get_binding, DummyClass)
-   
+
     def test_can_binding_spect(self):
         self.binder.bind_to("instance", [])
         self.binder.bind(DummyClass)
         assert self.binder.get_binding("instance") != []
-        assert isinstance(self.binder.get_binding("instance"), InstanceBindingSpec)
-        assert isinstance(self.binder.get_binding(DummyClass), ClassBindingSpec)
-
+        assert isinstance(self.binder.get_binding("instance"),
+                          InstanceBindingSpec)
+        assert isinstance(self.binder.get_binding(DummyClass),
+                          ClassBindingSpec)

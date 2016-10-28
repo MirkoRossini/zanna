@@ -47,21 +47,25 @@ class TestClassBindingSpec(unittest.TestCase):
 
     def test_get_argument_specs(self):
         class_binding_spec = ClassBindingSpec(DummyClass)
-        assert class_binding_spec.get_argument_specs() == [ArgumentSpec(None, "value")]
+        assert class_binding_spec.get_argument_specs() == [
+            ArgumentSpec(None, "value")]
 
     def test_get_argument_specs_type(self):
         class_binding_spec = ClassBindingSpec(DummyClassWithType)
-        assert class_binding_spec.get_argument_specs() == [ArgumentSpec(DummyClass, "dummy")]
+        assert class_binding_spec.get_argument_specs() == [
+            ArgumentSpec(DummyClass, "dummy")]
 
     def test_get_argument_specs_specs_empty(self):
         class_binding_spec = ClassBindingSpec(DummyClassEmpty)
         assert class_binding_spec.get_argument_specs() == []
 
     def test_construct_instance(self):
-        assert ClassBindingSpec(DummyClassEmpty).construct_instance({}) == DummyClassEmpty()
+        assert ClassBindingSpec(DummyClassEmpty).construct_instance(
+            {}) == DummyClassEmpty()
         with pytest.raises(TypeError):
             ClassBindingSpec(DummyClass).construct_instance({})
-        assert ClassBindingSpec(DummyClass).construct_instance({"value": 3}) == DummyClass(3)
+        assert ClassBindingSpec(DummyClass).construct_instance(
+            {"value": 3}) == DummyClass(3)
 
     def test_get_instance(self):
         with pytest.raises(TypeError):

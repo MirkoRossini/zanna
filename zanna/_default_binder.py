@@ -18,24 +18,33 @@ class _DefaultBinder(Binder):
         self._verify_is_class(klass)
         self._add_binding(klass, klass)
 
-    def bind_to(self, class_or_string: Union[type, str], bound_object: Any) -> None:
+    def bind_to(self,
+                class_or_string: Union[type, str],
+                bound_object: Any) -> None:
         self._verify_is_class_or_string(class_or_string)
         self._add_binding(class_or_string, bound_object)
 
-    def bind_provider(self, class_or_string: Union[type, str], callable_obj: Callable) -> None:
+    def bind_provider(self,
+                      class_or_string: Union[type, str],
+                      callable_obj: Callable) -> None:
         self._verify_is_callable(callable_obj)
         self._verify_not_bound(class_or_string)
-        self._bindings_dict[class_or_string] = ProviderBindingSpec(callable_obj)
+        self._bindings_dict[class_or_string] = ProviderBindingSpec(
+            callable_obj)
 
-    def get_binding(self, class_or_string: Union[type, str]) -> Binding:
+    def get_binding(self,
+                    class_or_string: Union[type, str]) -> Binding:
         self._verify_is_class_or_string(class_or_string)
         if class_or_string not in self._bindings_dict:
             raise ValueError("{} is not bound".format(class_or_string))
         return self._bindings_dict[class_or_string]
 
-    def _add_binding(self, class_or_string: Union[type, str], bound_object: Any) -> None:
+    def _add_binding(self,
+                     class_or_string: Union[type, str],
+                     bound_object: Any) -> None:
         self._verify_not_bound(class_or_string)
-        self._bindings_dict[class_or_string] = self._get_binding_spec(bound_object)
+        self._bindings_dict[class_or_string] = self._get_binding_spec(
+            bound_object)
 
     def _get_binding_spec(self, bound_object: Any) -> ArgumentSpec:
         if isclass(bound_object):
@@ -55,12 +64,16 @@ class _DefaultBinder(Binder):
     @staticmethod
     def _verify_is_callable(callable_obj: Callable):
         if not isfunction(callable_obj):
-            raise TypeError("Argument of bind_provider method should be a callable")
+            raise TypeError(
+                "Argument of bind_provider method should be a callable")
 
     @classmethod
-    def _verify_is_class_or_string(cls, class_or_string: Union[type, str]) -> None:
-        if not isclass(class_or_string) and not cls._is_string(class_or_string):
-            raise TypeError("Argument of bind_to method should be a class or a string")
+    def _verify_is_class_or_string(cls,
+                                   class_or_string: Union[type, str]) -> None:
+        if not isclass(class_or_string) and not cls._is_string(
+                class_or_string):
+            raise TypeError(
+                "Argument of bind_to method should be a class or a string")
 
     @classmethod
     def _is_string(cls, class_or_string: Union[type, str]) -> None:
