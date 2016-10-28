@@ -1,7 +1,6 @@
 import unittest
 import pytest
 from zanna._argument_spec import ArgumentSpec
-from zanna._binding import Binding
 from zanna._provider_binding_spec import ProviderBindingSpec
 
 

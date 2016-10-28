@@ -1,11 +1,14 @@
 from typing import Callable, Iterable, Union, Any
 from ._default_binder import _DefaultBinder
+from ._binder import Binder
 
 
 class Injector(object):
-    def __init__(self, module: Callable, *othermodules: Iterable[Callable]):
+    def __init__(self, module: Callable[[Binder], None], *othermodules: Iterable[Callable[[Binder], None]]):
         self._binder = _DefaultBinder()
         module(self._binder)
+        for othermodule in othermodules:
+            othermodule(self._binder)
 
     def get_instance(self, string_or_class: Union[type, str]) -> Any:
         binding_spec = self._binder.get_binding(string_or_class)

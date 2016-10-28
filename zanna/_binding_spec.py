@@ -43,8 +43,6 @@ class BindingSpec(metaclass=abc.ABCMeta):
 
 
 class InstanceBindingSpec(BindingSpec):
-
-
     def __init__(self, bound_object: Any):
         self._validate_object(bound_object)
         self._instance = bound_object

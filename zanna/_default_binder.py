@@ -1,12 +1,14 @@
-from inspect import isclass, isfunction, signature
-
+from inspect import isclass, isfunction
 from typing import Union, Any, Callable
 
+from pyflakes.checker import Binding
+
 from ._binder import Binder
-from ._binding import Binding
 from ._binding_spec import InstanceBindingSpec
 from ._class_binding_spec import ClassBindingSpec
 from ._provider_binding_spec import ProviderBindingSpec
+from ._argument_spec import ArgumentSpec
+
 
 class _DefaultBinder(Binder):
     def __init__(self):
@@ -35,13 +37,12 @@ class _DefaultBinder(Binder):
         self._verify_not_bound(class_or_string)
         self._bindings_dict[class_or_string] = self._get_binding_spec(bound_object)
 
-
-    def _get_binding_spec(self, bound_object: Any):
+    def _get_binding_spec(self, bound_object: Any) -> ArgumentSpec:
         if isclass(bound_object):
-           return ClassBindingSpec(bound_object)
+            return ClassBindingSpec(bound_object)
         else:
-           return InstanceBindingSpec(bound_object)
- 
+            return InstanceBindingSpec(bound_object)
+
     def _verify_not_bound(self, class_or_string: Union[type, str]):
         if class_or_string in self._bindings_dict:
             raise ValueError("{} is already bound".format(class_or_string))
@@ -64,4 +65,3 @@ class _DefaultBinder(Binder):
     @classmethod
     def _is_string(cls, class_or_string: Union[type, str]) -> None:
         return isinstance(class_or_string, str)
-

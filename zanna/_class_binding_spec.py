@@ -1,9 +1,8 @@
-from typing import Any, Dict, Iterable, Callable
-from inspect import isclass, signature, Signature
+from typing import Any, Dict, Iterable
+from inspect import isclass
 
 from ._binding_spec import BindingSpec
 from ._argument_spec import ArgumentSpec
-from ._binding import Binding
 from ._provider_binding_spec import get_argument_specs_for_callable
 
 

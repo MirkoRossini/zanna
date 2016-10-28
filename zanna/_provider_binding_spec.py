@@ -1,5 +1,5 @@
 from typing import Any, Dict, Iterable, Callable
-from inspect import isfunction, signature, Signature
+from inspect import signature, Signature
 from ._argument_spec import ArgumentSpec
 from ._binding_spec import BindingSpec
 
