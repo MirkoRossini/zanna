@@ -2,6 +2,8 @@ import unittest
 from unittest.mock import MagicMock
 
 from zanna._default_binder import _DefaultBinder
+from zanna._binding_spec import InstanceBindingSpec
+from zanna._class_binding_spec import ClassBindingSpec
 
 
 class DummyClass():
@@ -16,12 +18,15 @@ class TestDefaultBinder(unittest.TestCase):
     def setUp(self):
         self.binder = _DefaultBinder()
 
-    def test_can_bind_nonclass_raises(self):
+    def test_bind_nonclass_raises(self):
         self.assertRaises(TypeError, self.binder.bind, "")
         self.assertRaises(TypeError, self.binder.bind_to, 1, "")
 
     def test_can_bind_by_name(self):
         self.binder.bind_to("instance", [])
+
+    def test_get_binding_nonclass_or_string_raises(self):
+        self.assertRaises(TypeError, self.binder.get_binding, 1)
 
     def test_cannot_bind_twice(self):
         self.binder.bind_to("instance", [])
@@ -38,3 +43,15 @@ class TestDefaultBinder(unittest.TestCase):
 
     def test_can_bind_mocks(self):
         self.binder.bind_to(DummyClass, MagicMock())
+
+    def test_raises_if_not_bound(self):
+        self.assertRaises(ValueError, self.binder.get_binding, "instance")
+        self.assertRaises(ValueError, self.binder.get_binding, DummyClass)
+   
+    def test_can_binding_spect(self):
+        self.binder.bind_to("instance", [])
+        self.binder.bind(DummyClass)
+        assert self.binder.get_binding("instance") != []
+        assert isinstance(self.binder.get_binding("instance"), InstanceBindingSpec)
+        assert isinstance(self.binder.get_binding(DummyClass), ClassBindingSpec)
+

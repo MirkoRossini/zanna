@@ -4,6 +4,8 @@ from typing import Union, Any
 
 from ._binder import Binder
 from ._binding import Binding
+from ._binding_spec import InstanceBindingSpec
+from ._class_binding_spec import ClassBindingSpec
 
 
 class _DefaultBinder(Binder):
@@ -19,12 +21,21 @@ class _DefaultBinder(Binder):
         self._add_binding(class_or_string, bound_object)
 
     def get_binding(self, class_or_string: Union[type, str]) -> Binding:
-        return None
+        self._verify_is_class_or_string(class_or_string)
+        if class_or_string not in self._bindings_dict:
+            raise ValueError("{} is not bound".format(class_or_string))
+        return self._bindings_dict[class_or_string]
 
     def _add_binding(self, class_or_string, bound_object: Any) -> None:
         if class_or_string in self._bindings_dict:
             raise ValueError("{} is already bound".format(class_or_string))
-        self._bindings_dict[class_or_string] = bound_object
+        self._bindings_dict[class_or_string] = self._get_binding_spec(bound_object)
+
+    def _get_binding_spec(self, bound_object: Any):
+        if isclass(bound_object):
+           return ClassBindingSpec(bound_object)
+        else:
+           return InstanceBindingSpec(bound_object) 
 
     @staticmethod
     def _verify_is_class(klass: type) -> None:

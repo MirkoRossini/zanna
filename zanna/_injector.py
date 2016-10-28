@@ -8,5 +8,6 @@ class Injector(object):
         module(self._binder)
 
     def get_instance(self, string_or_class: Union[type, str]) -> Any:
+        
         return None
         
