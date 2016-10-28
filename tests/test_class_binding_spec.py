@@ -22,6 +22,10 @@ class DummyClassEmpty(object):
             raise Exception()
         return True
 
+class DummyClassWithType(object):
+    def __init__(self, dummy: DummyClass):
+        self._dummy = dummy
+
 class TestClassBindingSpec(unittest.TestCase):
     def test_binding_instance_raises(self):
         with pytest.raises(TypeError):
@@ -40,11 +44,15 @@ class TestClassBindingSpec(unittest.TestCase):
         class_binding_spec = ClassBindingSpec(DummyClass)
         assert class_binding_spec.get_argument_specs() == [ArgumentSpec(None, "value")]
 
+    def test_get_argument_specs_type(self):
+        class_binding_spec = ClassBindingSpec(DummyClassWithType)
+        assert class_binding_spec.get_argument_specs() == [ArgumentSpec(DummyClass, "dummy")]
+
     def test_get_argument_specs_specs_empty(self):
         class_binding_spec = ClassBindingSpec(DummyClassEmpty)
         assert class_binding_spec.get_argument_specs() == []
 
-    def test_get_argument_specs_specs_empty(self):
+    def test_construct_instance(self):
         assert ClassBindingSpec(DummyClassEmpty).construct_instance({}) == DummyClassEmpty()
         with pytest.raises(TypeError):
             ClassBindingSpec(DummyClass).construct_instance({})
