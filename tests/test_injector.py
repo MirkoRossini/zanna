@@ -6,6 +6,7 @@ from zanna import Binder
 
 
 THING_VALUE = 3
+OTHERTHING_VALUE = 30
 
 class ThingConsumer:
     def __init__(self, thing):
@@ -13,9 +14,11 @@ class ThingConsumer:
 class JustAClass:
     pass
 
+def provider(otherthing):
+    assert otherthing == OTHERTHING_VALUE
+    return THING_VALUE
 
-
-class TestBinder(unittest.TestCase):
+class TestInjector(unittest.TestCase):
     def test_init_empty(self):
         self.assertRaises(TypeError, Injector)
 
@@ -49,6 +52,17 @@ class TestBinder(unittest.TestCase):
         assert thing_consumer is not None
         assert isinstance(thing_consumer, ThingConsumer)
 
+    def test_get_instance_with_provider(self):
+        def module(binder):
+            binder.bind(ThingConsumer)
+            binder.bind_provider("thing", provider)
+            binder.bind_to("otherthing", OTHERTHING_VALUE)
+        i = Injector(module)
+        thing_consumer = i.get_instance(ThingConsumer)
+        assert thing_consumer is not None
+        assert isinstance(thing_consumer, ThingConsumer)
+
     @staticmethod
     def _called_with_binder(binder):
         assert isinstance(binder, Binder)
+

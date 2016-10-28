@@ -1,34 +1,31 @@
 from typing import Any, Dict, Iterable, Callable
-from inspect import isclass, signature, Signature
-
-from ._binding_spec import BindingSpec
+from inspect import isfunction, signature, Signature
 from ._argument_spec import ArgumentSpec
-from ._binding import Binding
-from ._provider_binding_spec import get_argument_specs_for_callable
+from ._binding_spec import BindingSpec
 
 
-def get_argument_specs_for_class(klass: type):
-    if not isinstance(klass, type):
-        raise TypeError("klass should be a type")
-    return get_argument_specs_for_callable(klass)
+def get_argument_specs_for_callable(callable_obj: Callable):
+    return [ArgumentSpec(arg.annotation if arg.annotation != Signature.empty else None, name)
+            for name, arg in signature(callable_obj).parameters.items()
+            if name != 'self']
 
 
-class ClassBindingSpec(BindingSpec):
+class ProviderBindingSpec(BindingSpec):
     """
-    Binding spec for a class.
+    Binding spec for a provider.
     """
 
-    def __init__(self, klass: type):
-        self._validate_argument(klass)
-        self._klass = klass
-        self._argument_specs = get_argument_specs_for_class(klass)
+    def __init__(self, provider: Callable):
+        self._validate_argument(provider)
+        self._provider = provider
+        self._argument_specs = get_argument_specs_for_callable(provider)
 
     @staticmethod
     def _validate_argument(argument):
-        if not isclass(argument):
+        if not callable(argument):
             raise TypeError(
-                "{} should only be used with classes".format(
-                    ClassBindingSpec.__name__))
+                "{} should only be used with callables".format(
+                    ProviderBindingSpec.__name__))
 
     def has_instance(self):
         """
@@ -46,7 +43,8 @@ class ClassBindingSpec(BindingSpec):
              "they need to be constructed each time").format(self.__class__.__name__))
 
     def construct_instance(self, keyword_arguments: Dict[str, object]) -> Any:
-        return self._klass(**keyword_arguments)
+        return self._provider(**keyword_arguments)
 
     def get_argument_specs(self) -> Iterable[ArgumentSpec]:
         return self._argument_specs
+

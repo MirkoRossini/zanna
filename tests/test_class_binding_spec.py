@@ -61,3 +61,4 @@ class TestClassBindingSpec(unittest.TestCase):
     def test_get_instance(self):
         with pytest.raises(TypeError):
            ClassBindingSpec(DummyClass).get_instance()
+
