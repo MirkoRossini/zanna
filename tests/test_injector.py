@@ -11,6 +11,11 @@ OTHERTHING_VALUE = 30
 class ThingConsumer:
     def __init__(self, thing):
         assert thing == THING_VALUE
+
+class ClassConsumer:
+    def __init__(self, thing_consumer: ThingConsumer):
+        assert isinstance(thing_consumer, ThingConsumer)
+
 class JustAClass:
     pass
 
@@ -51,6 +56,16 @@ class TestInjector(unittest.TestCase):
         thing_consumer = i.get_instance(ThingConsumer)
         assert thing_consumer is not None
         assert isinstance(thing_consumer, ThingConsumer)
+
+    def test_get_instance_using_type(self):
+        def module(binder):
+            binder.bind(ThingConsumer)
+            binder.bind(ClassConsumer)
+            binder.bind_to("thing", THING_VALUE)
+        i = Injector(module)
+        class_consumer = i.get_instance(ClassConsumer)
+        assert class_consumer is not None
+        assert isinstance(class_consumer, ClassConsumer)
 
     def test_get_instance_with_provider(self):
         def module(binder):
