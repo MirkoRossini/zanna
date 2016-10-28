@@ -15,13 +15,11 @@ class TestBinder(unittest.TestCase):
         Injector(module)
         assert module.called
 
-    """
     def test_get_simple_instance(self):
         i = Injector(lambda binder: binder.bind_to("thing", 3))
         thing = i.get_instance("thing")
         assert thing == 3
-    """
-    """
+
     def test_get_instance(self):
         i = Injector(lambda binder: binder.bind_to("thing", 3))
         class ThingConsumer:
@@ -30,7 +28,6 @@ class TestBinder(unittest.TestCase):
         thing_consumer = i.get_instance(ThingConsumer)
         assert thing_consumer is not None
         assert isinstance(thing_consumer, ThingConsumer)
-    """
 
     @staticmethod
     def _called_with_binder(binder):
