@@ -50,7 +50,7 @@ class InstanceBindingSpec(BindingSpec):
     def get_instance(self):
         return self._instance
 
-    def construct_instance(keyword_arguments: Dict[str, object]) -> Any:
+    def construct_instance(self, keyword_arguments: Dict[str, object]) -> Any:
         raise TypeError("{} doesn't need to construct instances".format(
             InstanceBindingSpec.__name__))
 

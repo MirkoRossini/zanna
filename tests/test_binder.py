@@ -28,6 +28,9 @@ class TestDefaultBinder(unittest.TestCase):
     def test_get_binding_nonclass_or_string_raises(self):
         self.assertRaises(TypeError, self.binder.get_binding, 1)
 
+    def test_binding_non_callable_provider_raises(self):
+        self.assertRaises(TypeError, self.binder.bind_provider, "provider", 1)
+
     def test_cannot_bind_twice(self):
         self.binder.bind_to("instance", [])
         self.assertRaises(ValueError, self.binder.bind_to, "instance", 21)

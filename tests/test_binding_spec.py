@@ -34,6 +34,13 @@ class TestInstanceBindingSpec(TestCase):
         with pytest.raises(TypeError):
             bspec = InstanceBindingSpec(None)
 
+    def test_argspec_methods_raise(self):
+        bspec = InstanceBindingSpec(3)
+        with pytest.raises(TypeError):
+            bspec.construct_instance({})
+        with pytest.raises(TypeError):
+            bspec.get_argument_specs()
+
     def test_callable_binding_spec(self):
         bspec = InstanceBindingSpec(TEST_CALLABLE)
         print (bspec.get_instance())

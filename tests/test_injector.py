@@ -30,8 +30,21 @@ class TestInjector(unittest.TestCase):
     def test_init_module_is_called(self):
         module = MagicMock()
         module.side_effect = self._called_with_binder
+
         Injector(module)
         assert module.called
+
+        other_module1 = MagicMock()
+        other_module2 = MagicMock()
+        other_module1.side_effect = self._called_with_binder
+        other_module2.side_effect = self._called_with_binder
+
+        module.reset_mock()
+
+        Injector(module, other_module1, other_module2)
+        assert module.called
+        assert other_module1.called
+        assert other_module2.called
 
     def test_get_simple_instance(self):
         i = Injector(lambda binder: binder.bind_to("thing", THING_VALUE))
@@ -60,6 +73,16 @@ class TestInjector(unittest.TestCase):
     def test_get_instance_using_type(self):
         def module(binder):
             binder.bind(ThingConsumer)
+            binder.bind(ClassConsumer)
+            binder.bind_to("thing", THING_VALUE)
+        i = Injector(module)
+        class_consumer = i.get_instance(ClassConsumer)
+        assert class_consumer is not None
+        assert isinstance(class_consumer, ClassConsumer)
+
+    def test_get_instance_fallback_name(self):
+        def module(binder):
+            binder.bind_to("thing_consumer", ThingConsumer)
             binder.bind(ClassConsumer)
             binder.bind_to("thing", THING_VALUE)
         i = Injector(module)
