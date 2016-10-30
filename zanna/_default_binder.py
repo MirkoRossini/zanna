@@ -4,10 +4,8 @@ from typing import Union, Any, Callable
 from pyflakes.checker import Binding
 
 from ._binder import Binder
-from ._binding_spec import InstanceBindingSpec
-from ._class_binding_spec import ClassBindingSpec
 from ._provider_binding_spec import ProviderBindingSpec
-from ._argument_spec import ArgumentSpec
+from ._get_binding_spec import get_binding_spec
 
 
 class _DefaultBinder(Binder):
@@ -43,14 +41,8 @@ class _DefaultBinder(Binder):
                      class_or_string: Union[type, str],
                      bound_object: Any) -> None:
         self._verify_not_bound(class_or_string)
-        self._bindings_dict[class_or_string] = self._get_binding_spec(
+        self._bindings_dict[class_or_string] = get_binding_spec(
             bound_object)
-
-    def _get_binding_spec(self, bound_object: Any) -> ArgumentSpec:
-        if isclass(bound_object):
-            return ClassBindingSpec(bound_object)
-        else:
-            return InstanceBindingSpec(bound_object)
 
     def _verify_not_bound(self, class_or_string: Union[type, str]):
         if class_or_string in self._bindings_dict:
