@@ -26,6 +26,9 @@ def provider(otherthing):
     assert otherthing == OTHERTHING_VALUE
     return THING_VALUE
 
+def just_a_class_provider(otherthing) -> JustAClass:
+    assert otherthing == OTHERTHING_VALUE
+    return JustAClass()
 
 class TestInjector(unittest.TestCase):
     def test_init_empty(self):
@@ -107,6 +110,16 @@ class TestInjector(unittest.TestCase):
         thing_consumer = i.get_instance(ThingConsumer)
         assert thing_consumer is not None
         assert isinstance(thing_consumer, ThingConsumer)
+
+    def test_get_instance_with_provider_using_annotation(self):
+        def module(binder):
+            binder.bind_provider(just_a_class_provider)
+            binder.bind_to("otherthing", OTHERTHING_VALUE)
+
+        i = Injector(module)
+        just_a_class = i.get_instance(JustAClass)
+        assert just_a_class is not None
+        assert isinstance(just_a_class, JustAClass)
 
     @staticmethod
     def _called_with_binder(binder):

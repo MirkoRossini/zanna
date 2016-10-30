@@ -1,4 +1,4 @@
-from inspect import isclass, isfunction
+from inspect import isclass, isfunction, signature
 from typing import Union, Any, Callable
 
 from pyflakes.checker import Binding
@@ -6,6 +6,13 @@ from pyflakes.checker import Binding
 from ._binder import Binder
 from ._provider_binding_spec import ProviderBindingSpec
 from ._get_binding_spec import get_binding_spec
+
+
+def _get_return_annotation_for_callable(callable_obj: Callable) -> type:
+    sig = signature(callable_obj)
+    if sig.return_annotation != sig.empty:
+        return sig.return_annotation
+    return None
 
 
 class _DefaultBinder(Binder):
@@ -23,12 +30,17 @@ class _DefaultBinder(Binder):
         self._add_binding(class_or_string, bound_object)
 
     def bind_provider(self,
-                      class_or_string: Union[type, str],
-                      callable_obj: Callable) -> None:
-        self._verify_is_callable(callable_obj)
-        self._verify_not_bound(class_or_string)
-        self._bindings_dict[class_or_string] = ProviderBindingSpec(
-            callable_obj)
+                      class_string_or_callable: Union[type, str, Callable],
+                      callable_obj: Callable = None) -> None:
+        if callable_obj is None:
+            self._bind_provider_by_annotation(class_string_or_callable)
+
+        else:
+            self._verify_is_callable(callable_obj)
+            self._verify_not_bound(class_string_or_callable)
+            self._bindings_dict[
+                class_string_or_callable] = ProviderBindingSpec(
+                callable_obj)
 
     def get_binding(self,
                     class_or_string: Union[type, str]) -> Binding:
@@ -70,3 +82,13 @@ class _DefaultBinder(Binder):
     @classmethod
     def _is_string(cls, class_or_string: Union[type, str]) -> None:
         return isinstance(class_or_string, str)
+
+    def _bind_provider_by_annotation(self, callable_obj):
+        self._verify_is_callable(callable_obj)
+        klass = _get_return_annotation_for_callable(
+            callable_obj)
+        if klass is None:
+            raise TypeError("When binding a provider, "
+                            "first argument must be a provider "
+                            "with a return annotation")
+        self.bind_provider(klass, callable_obj)
