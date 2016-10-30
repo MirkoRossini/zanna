@@ -13,10 +13,13 @@ zanna
         :target: https://zanna.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-.. image:: https://pyup.io/repos/github/MirkoRossini/zanna/shield.svg
-     :target: https://pyup.io/repos/github/MirkoRossini/zanna/
+.. image:: https://pyup.io/repos/github/mirkorossini/zanna/shield.svg
+     :target: https://pyup.io/repos/github/mirkorossini/zanna/
      :alt: Updates
 
+.. image:: https://pyup.io/repos/github/mirkorossini/zanna/python-3-shield.svg
+     :target: https://pyup.io/repos/github/mirkorossini/zanna/
+     :alt: Python 3
 
 Simple Dependency Injection library
 
