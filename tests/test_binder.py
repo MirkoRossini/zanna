@@ -38,9 +38,13 @@ class TestDefaultBinder(unittest.TestCase):
         self.binder.bind_provider(provider)
 
     def test_binding_non_callable_provider_raises(self):
+        def provider():
+            pass
+
         self.assertRaises(TypeError, self.binder.bind_provider, "provider", 1)
         self.assertRaises(TypeError, self.binder.bind_provider, "provider")
-        self.binder.bind_provider("provider", lambda: 1)
+        self.assertRaises(TypeError, self.binder.bind_provider, provider)
+        self.binder.bind_provider("provider", provider)
 
     def test_cannot_bind_twice(self):
         self.binder.bind_to("instance", [])
