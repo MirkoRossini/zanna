@@ -21,17 +21,35 @@ zanna
      :target: https://pyup.io/repos/github/mirkorossini/zanna/
      :alt: Python 3
 
-Simple Dependency Injection library
-
+Simple Dependency Injection library.
+Supports python 3.5+ and makes full use of the typing annotations.
+The design is pythonic but inspired by Guice in many aspects.
 
 * Free software: BSD license
 * Documentation: https://zanna.readthedocs.io.
+
+Motivation
+----------
+
+Zanna is meant to be a modern (3.5+), well maintained injection library for Python.
 
 
 Features
 --------
 
-* TODO
+* Support for typing annotations
+* Decorators are not mandatory: all the injection logic can be outside your modules
+* Supports injection by name
+* Instances can be bound directly, useful when testing (i.e. by override bindings with mocks)
+* No autodiscover for performance reasons and to avoid running into annoying bugs
+
+
+
+TODO
+----
+
+* Decorators
+* Override bindings method
 
 Credits
 ---------
