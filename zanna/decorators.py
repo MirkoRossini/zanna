@@ -3,6 +3,7 @@ from collections import namedtuple
 from ._binder import Binder
 
 BIND_PROVIDER = 'bind_provider'
+BIND = 'bind'
 
 _MethodCall = namedtuple('_MethodCall', ['method_name', 'args'])
 
@@ -11,11 +12,9 @@ class _MethodCallsListModule:
         self._methodcalls=[]
 
     def add_method_call(self, method_name, args):
-        print ("ADDING", method_name, args)
         self._methodcalls.append(_MethodCall(method_name, args))
 
     def __call__(self, binder: Binder) -> None:
-        print("CALLED CALLED", self._methodcalls)
         for method_name, args in self._methodcalls:
             getattr(binder, method_name)(*args)
 
@@ -30,6 +29,9 @@ def provider_for(class_or_string=None):
 
 
 def provider(provider):
-        #print("INDIDE", bind_provider, provider, class_or_string)
-        _module.add_method_call(BIND_PROVIDER, (provider,))
+     _module.add_method_call(BIND_PROVIDER, (provider,))
 
+def bind(klass):
+    _module.add_method_call(BIND, (klass,))
+    return klass
+ 

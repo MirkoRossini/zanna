@@ -26,7 +26,7 @@ class _DefaultBinder(Binder):
     def bind_to(self,
                 class_or_string: Union[type, str],
                 bound_object: Any) -> None:
-        self._verify_is_class_or_string(class_or_string)
+        self._verify_is_class_or_string(class_or_string, 'bind_to')
         self._add_binding(class_or_string, bound_object)
 
     def bind_provider(self,
@@ -44,7 +44,7 @@ class _DefaultBinder(Binder):
 
     def get_binding(self,
                     class_or_string: Union[type, str]) -> BindingSpec:
-        self._verify_is_class_or_string(class_or_string)
+        self._verify_is_class_or_string(class_or_string, 'get_binding')
         if class_or_string not in self._bindings_dict:
             raise ValueError("{} is not bound".format(class_or_string))
         return self._bindings_dict[class_or_string]
@@ -73,11 +73,12 @@ class _DefaultBinder(Binder):
 
     @classmethod
     def _verify_is_class_or_string(cls,
-                                   class_or_string: Union[type, str]) -> None:
+                                   class_or_string: Union[type, str],
+                                   method_name: str) -> None:
         if not isclass(class_or_string) and not cls._is_string(
                 class_or_string):
             raise TypeError(
-                "Argument of bind_to method should be a class or a string")
+                "Argument of {} method should be a class or a string".format(method_name))
 
     @classmethod
     def _is_string(cls, class_or_string: Union[type, str]) -> None:

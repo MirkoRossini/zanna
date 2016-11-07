@@ -20,6 +20,7 @@ class Injector(object):
 
     def get_instance(self, string_or_class: Union[type, str]) -> Any:
         binding_spec = self._binder.get_binding(string_or_class)
+        
         if binding_spec.has_instance():
             return binding_spec.get_instance()
         else:
