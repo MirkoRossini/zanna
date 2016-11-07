@@ -1,11 +1,11 @@
 from inspect import isclass, isfunction, signature
 from typing import Union, Any, Callable
 
-from pyflakes.checker import Binding
-
 from ._binder import Binder
 from ._provider_binding_spec import ProviderBindingSpec
 from ._get_binding_spec import get_binding_spec
+from ._argument_spec import ArgumentSpec
+from ._binding_spec import BindingSpec
 
 
 def _get_return_annotation_for_callable(callable_obj: Callable) -> type:
@@ -43,7 +43,7 @@ class _DefaultBinder(Binder):
                 callable_obj)
 
     def get_binding(self,
-                    class_or_string: Union[type, str]) -> Binding:
+                    class_or_string: Union[type, str]) -> BindingSpec:
         self._verify_is_class_or_string(class_or_string)
         if class_or_string not in self._bindings_dict:
             raise ValueError("{} is not bound".format(class_or_string))

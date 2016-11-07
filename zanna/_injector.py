@@ -5,12 +5,18 @@ from ._binder import Binder
 
 
 class Injector(object):
-    def __init__(self, module: Callable[[Binder], None],
-                 *othermodules: Iterable[Callable[[Binder], None]]):
+    def __init__(self, *modules: Iterable[Callable[[Binder], None]],
+                 use_decorators=False):
         self._binder = _DefaultBinder()
-        module(self._binder)
-        for othermodule in othermodules:
-            othermodule(self._binder)
+        if use_decorators:
+            from .decorators import _module
+            _module(self._binder)
+            
+        for module in modules:
+            module(self._binder)
+
+        if not use_decorators and len(modules) == 0:
+            raise TypeError("Need to use decorators or specify at least one module")
 
     def get_instance(self, string_or_class: Union[type, str]) -> Any:
         binding_spec = self._binder.get_binding(string_or_class)
