@@ -89,6 +89,14 @@ class TestInjector(unittest.TestCase):
         assert class_consumer is not None
         assert isinstance(class_consumer, ClassConsumer)
 
+    def test_get_instance_using_type_without_binding(self):
+        def module(binder):
+            binder.bind(ThingConsumer)
+            binder.bind_to("thing", THING_VALUE)
+        i = Injector(module)
+        class_consumer = i.get_instance(ClassConsumer)
+        assert isinstance(class_consumer, ClassConsumer)
+
     def test_get_instance_fallback_name(self):
         def module(binder):
             binder.bind_to("thing_consumer", ThingConsumer)

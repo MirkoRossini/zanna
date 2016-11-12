@@ -45,7 +45,9 @@ class _DefaultBinder(Binder):
                     class_or_string: Union[type, str]) -> BindingSpec:
         self._verify_is_class_or_string(class_or_string, 'get_binding')
         if class_or_string not in self._bindings_dict:
-            raise ValueError("{} is not bound".format(class_or_string))
+            if isinstance(class_or_string, str):
+                raise ValueError("{} is not bound".format(class_or_string))
+            return get_binding_spec(class_or_string)
         return self._bindings_dict[class_or_string]
 
     def _add_binding(self,
