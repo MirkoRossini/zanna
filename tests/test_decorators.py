@@ -18,7 +18,7 @@ def provide_thing() -> Thing:
     return Thing()
 
 
-@decorators.bind
+@decorators.inject
 class OtherThing:
     def __init__(self, value, thing:Thing):
         self.value = value

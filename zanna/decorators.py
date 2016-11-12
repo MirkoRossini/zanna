@@ -1,4 +1,5 @@
 from collections import namedtuple
+from typing import Union, Callable, Iterable
 
 from ._binder import Binder
 
@@ -12,7 +13,7 @@ class _MethodCallsListModule:
     def __init__(self):
         self._methodcalls = []
 
-    def add_method_call(self, method_name, args):
+    def add_method_call(self, method_name: str, args: Iterable):
         self._methodcalls.append(_MethodCall(method_name, args))
 
     def __call__(self, binder: Binder) -> None:
@@ -23,7 +24,7 @@ class _MethodCallsListModule:
 _module = _MethodCallsListModule()
 
 
-def provider_for(class_or_string=None):
+def provider_for(class_or_string: Union[type, str] = None) -> Callable:
     def bind_provider(provider):
         _module.add_method_call(BIND_PROVIDER, (class_or_string, provider))
         return provider
@@ -31,10 +32,10 @@ def provider_for(class_or_string=None):
     return bind_provider
 
 
-def provider(provider):
+def provider(provider: Callable) -> None:
     _module.add_method_call(BIND_PROVIDER, (provider,))
 
 
-def bind(klass):
+def inject(klass: type) -> type:
     _module.add_method_call(BIND, (klass,))
     return klass
