@@ -11,16 +11,17 @@ class Injector(object):
         if use_decorators:
             from .decorators import _module
             _module(self._binder)
-            
+
         for module in modules:
             module(self._binder)
 
         if not use_decorators and len(modules) == 0:
-            raise TypeError("Need to use decorators or specify at least one module")
+            raise TypeError(
+                "Need to use decorators or specify at least one module")
 
     def get_instance(self, string_or_class: Union[type, str]) -> Any:
         binding_spec = self._binder.get_binding(string_or_class)
-        
+
         if binding_spec.has_instance():
             return binding_spec.get_instance()
         else:

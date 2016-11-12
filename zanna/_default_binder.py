@@ -4,7 +4,6 @@ from typing import Union, Any, Callable
 from ._binder import Binder
 from ._provider_binding_spec import ProviderBindingSpec
 from ._get_binding_spec import get_binding_spec
-from ._argument_spec import ArgumentSpec
 from ._binding_spec import BindingSpec
 
 
@@ -78,7 +77,8 @@ class _DefaultBinder(Binder):
         if not isclass(class_or_string) and not cls._is_string(
                 class_or_string):
             raise TypeError(
-                "Argument of {} method should be a class or a string".format(method_name))
+                "Argument of {} method should be a class or a string".format(
+                    method_name))
 
     @classmethod
     def _is_string(cls, class_or_string: Union[type, str]) -> None:
