@@ -95,3 +95,16 @@ class _DefaultBinder(Binder):
                             "first argument must be a provider "
                             "with a return annotation")
         self.bind_provider(klass, callable_obj)
+
+    def override_binding(self, class_or_string: Union[type, str],
+                         bound_object: Any) -> None:
+        self._verify_is_class_or_string(class_or_string, "override_binding")
+        if class_or_string not in self._bindings_dict:
+            raise ValueError(("{} is not bound "
+                              "and can't be overridden").format(
+                class_or_string))
+        self._remove_binding(class_or_string)
+        self._add_binding(class_or_string, bound_object)
+
+    def _remove_binding(self, class_or_string: Union[type, str]):
+        del self._bindings_dict[class_or_string]

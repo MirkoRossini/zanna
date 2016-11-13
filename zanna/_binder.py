@@ -18,3 +18,9 @@ class Binder(metaclass=ABCMeta):
                       class_or_string: Union[type, str],
                       callable_obj: Callable) -> None:
         pass
+
+    @abstractmethod
+    def override_binding(self,
+                         class_or_string: Union[type, str],
+                         bound_object: Any) -> None:
+        pass

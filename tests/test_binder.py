@@ -56,6 +56,10 @@ class TestDefaultBinder(unittest.TestCase):
     def test_can_bind_class(self):
         self.binder.bind(DummyClass)
 
+    def test_can_override_binding(self):
+        self.binder.bind(DummyClass)
+        self.binder.override_binding(DummyClass, [])
+
     def test_can_bind_function(self):
         self.binder.bind_to("name", dummyfunc)
 
