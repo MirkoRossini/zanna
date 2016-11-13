@@ -16,6 +16,11 @@ class DummyClass(object):
         return other.value == self.value
 
 
+class DummyClassIntAnnotation(object):
+    def __init__(self, value: int):
+        self.value = value
+
+
 class DummyClassEmpty(object):
     def __init__(self):
         pass
@@ -49,6 +54,11 @@ class TestClassBindingSpec(unittest.TestCase):
         class_binding_spec = ClassBindingSpec(DummyClass)
         assert class_binding_spec.get_argument_specs() == [
             ArgumentSpec(None, "value")]
+
+    def test_get_argument_specs_int_annotation(self):
+        class_binding_spec = ClassBindingSpec(DummyClassIntAnnotation)
+        self.assertEquals(class_binding_spec.get_argument_specs(), [
+            ArgumentSpec(None, "value")])
 
     def test_get_argument_specs_type(self):
         class_binding_spec = ClassBindingSpec(DummyClassWithType)

@@ -1,13 +1,27 @@
 from typing import Any, Dict, Iterable, Callable
-from inspect import signature, Signature
+from inspect import signature, Signature, Parameter, isclass
+import builtins
 
 from ._argument_spec import ArgumentSpec
 from ._binding_spec import BindingSpec
 
+_BUILTINS = set(builtin
+                for builtin in builtins.__dict__.values()
+                if isclass(builtin))
+
+
+def _isbuiltin_class(klass: type):
+    return klass in _BUILTINS
+
+
+def _arg_has_valid_annotation(arg: Parameter):
+    return arg.annotation != Signature.empty \
+           and not _isbuiltin_class(arg.annotation)
+
 
 def get_argument_specs_for_callable(callable_obj: Callable):
     return [ArgumentSpec(
-        arg.annotation if arg.annotation != Signature.empty else None, name)
+        arg.annotation if _arg_has_valid_annotation(arg) else None, name)
             for name, arg in signature(callable_obj).parameters.items()
             if name != 'self']
 
