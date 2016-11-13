@@ -1,6 +1,6 @@
-===============================
+=====
 zanna
-===============================
+=====
 
 
 .. image:: https://img.shields.io/pypi/v/zanna.svg
@@ -43,16 +43,106 @@ Features
 * Instances can be bound directly, useful when testing (i.e. by override bindings with mocks)
 * No autodiscover for performance reasons and to avoid running into annoying bugs
 
+Usage
+-----
+
+Injecting by variable name
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The basic form of injection is performed by variable name.
+The injector expects a list of modules (any callable that takes a Binder as argument).
+You can get the bound instance by calling get_instance
+
+..  code-block:: python
+
+    from zanna import Injector, Binder
+
+    def mymodule(binder: Binder) -> None:
+        binder.bind_to("value", 3)
+
+    injector = Injector(mymodule)
+    assert injector.get_instance("value") == 3
+
+Zanna will automatically inject the value into arguments with the same name:
+
+..  code-block:: python
+
+    from zanna import Injector, Binder
+
+    def mymodule(binder: Binder) -> None:
+        binder.bind_to("value", 3)
+
+    class ValueConsumer:
+        def __init__(self, value):
+            self.value = value
+
+    injector = Injector(mymodule)
+    assert injector.get_instance(ValueConsumer).value == 3
+
+
+Injecting by type annotation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Zanna also makes use of python typing annotations to find the right instance to inject.
+
+..  code-block:: python
+
+    from zanna import Injector, Binder
+
+    class ValueClass:
+        def __init__(self, the_value: int):
+            self.the_value = the_value
+
+    class ValueConsumer:
+        def __init__(self, value_class_instance: ValueClass):
+            self.value_class_instance = value_class_instance
+
+    def mymodule(binder: Binder) -> None:
+        binder.bind_to("the_value", 3)
+        binder.bind(ValueClass)
+
+    injector = Injector(mymodule)
+    assert injector.get_instance(ValueConsumer).value_class_instance.the_value == 3
+
+
+Use providers for more complex use cases
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Binder instances can be used to bind providers. A provider is any callable that takes
+any number of arguments and returns any type. The injector will try to inject all the necessary
+arguments. Providers can be bound explicitely or implicitely (in which case zanna will use the
+return annotation to bind by type).
+
+..  code-block:: python
+
+    from zanna import Injector, Binder
+
+    class AValueConsumer:
+        def __init__(self, value: int):
+            self.value = value
+
+    def explicit_provider(a_value: int) -> int:
+        return a_value + 100
+
+    def implicit_provider(value_plus_100: int) -> AValueConsumer:
+        return AValueConsumer(value_plus_100)
+
+    def mymodule(binder: Binder) -> None:
+        binder.bind_to("a_value", 3)
+        binder.bind_provider("value_plus_100", explicit_provider)
+        binder.bind_provider(implicit_provider)
+
+    injector = Injector(mymodule)
+    assert injector.get_instance(AValueConsumer).value == 103
 
 
 TODO
 ----
 
-* Decorators
 * Override bindings method
 
 Credits
----------
+-------
 
 This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
 
