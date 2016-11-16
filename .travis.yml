@@ -23,7 +23,11 @@ deploy:
       UCtkQU5TYytocHBrejdNdFRUY3RQWlI1V1pqWjloS0tQZFo0Vk02VzM1NWl4TWxOSnpBSndKUjg9
 env:
 - TOXENV=py35
+- TOXENV=py36
+- TOXENV=flake8
 install: pip install -U tox
 language: python
-python: 3.5
+python: 
+  - 3.5
+  - 3.6-dev
 script: tox -e ${TOXENV}
