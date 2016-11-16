@@ -21,13 +21,9 @@ deploy:
       eEFQd1kxRzhNb1dEQU01Z284Zm9ZZE1PcDlOUE9LQmJ5NSt1SzB4VWhKQTUzbDdCOFdVa0hDMmN6
       cnlPTE9mV1pUK3pBeStuZFc5NDZ0dHJqTEZRdW5qU3pmNGxpV3FYRFRSV1AwYkpwZk16QlYrckRL
       UCtkQU5TYytocHBrejdNdFRUY3RQWlI1V1pqWjloS0tQZFo0Vk02VzM1NWl4TWxOSnpBSndKUjg9
-env:
-- TOXENV=py35
-- TOXENV=py36
-- TOXENV=flake8
-install: pip install -U tox
+install: pip install -U tox-travis
 language: python
 python: 
   - 3.5
   - 3.6-dev
-script: tox -e ${TOXENV}
+script: tox
