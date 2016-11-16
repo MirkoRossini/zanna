@@ -163,7 +163,7 @@ Override bindings is extremely useful when testing, as any part of your stack ca
         binder.bind(ValueClass)
 
     injector = Injector(mymodule)
-    assert injector.get_instance(ValueConsumer).value.retrieve_something == ['some', 'thing']
+    assert injector.get_instance(ValueConsumer).value.retrieve_something() == ['some', 'thing']
 
     def module_overriding_value_class(binder: Binder) -> None:
         mock_value_class = MagicMock(ValueClass)
@@ -171,7 +171,7 @@ Override bindings is extremely useful when testing, as any part of your stack ca
         binder.override_binding(ValueClass, mock_value_class)
 
     injector = Injector(mymodule, module_overriding_value_class)
-    assert injector.get_instance(ValueConsumer).value.retrieve_something == ['mock']
+    assert injector.get_instance(ValueConsumer).value.retrieve_something() == ['mock']
 
 
 
