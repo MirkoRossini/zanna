@@ -136,6 +136,46 @@ return annotation to bind by type).
     assert injector.get_instance(AValueConsumer).value == 103
 
 
+Override existing bindings
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Bindings can be overridden. Overriding a non-existent binding will result in a ValueError being raised.
+Override bindings is extremely useful when testing, as any part of your stack can be replaced with a mock.
+
+
+..  code-block:: python
+
+    from zanna import Injector, Binder
+    from unittest.mock import MagicMock
+
+    class ValueClass:
+        def __init__(self):
+            pass
+        def retrieve_something(self):
+            return ['some', 'thing']
+
+    class ValueConsumer:
+        def __init__(self, value: ValueClass):
+            self.value = value
+
+
+    def mymodule(binder: Binder) -> None:
+        binder.bind(ValueClass)
+
+    injector = Injector(mymodule)
+    assert injector.get_instance(ValueConsumer).value.retrieve_something == ['some', 'thing']
+
+    def module_overriding_value_class(binder: Binder) -> None:
+        mock_value_class = MagicMock(ValueClass)
+        mock_value_class.retrieve_something.return_value = ['mock']
+        binder.override_binding(ValueClass, mock_value_class)
+
+    injector = Injector(mymodule, module_overriding_value_class)
+    assert injector.get_instance(ValueConsumer).value.retrieve_something == ['mock']
+
+
+
+
 TODO
 ----
 
