@@ -29,13 +29,13 @@ The design is pythonic but inspired by Guice in many aspects.
 * Documentation: https://zanna.readthedocs.io.
 
 Motivation
-----------
+==========
 
 Zanna is meant to be a modern (3.5+), well maintained injection library for Python.
 
 
 Features
---------
+========
 
 * Support for typing annotations
 * Decorators are not mandatory: all the injection logic can be outside your modules
@@ -44,10 +44,10 @@ Features
 * No autodiscover for performance reasons and to avoid running into annoying bugs
 
 Usage
------
+=====
 
 Injecting by variable name
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------
 
 The basic form of injection is performed by variable name.
 The injector expects a list of modules (any callable that takes a Binder as argument).
@@ -81,7 +81,7 @@ Zanna will automatically inject the value into arguments with the same name:
 
 
 Injecting by type annotation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------
 
 Zanna also makes use of python typing annotations to find the right instance to inject.
 
@@ -106,7 +106,7 @@ Zanna also makes use of python typing annotations to find the right instance to 
 
 
 Use providers for more complex use cases
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------------
 
 Binder instances can be used to bind providers. A provider is any callable that takes
 any number of arguments and returns any type. The injector will try to inject all the necessary
@@ -137,7 +137,7 @@ return annotation to bind by type).
 
 
 Override existing bindings
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------
 
 Bindings can be overridden. Overriding a non-existent binding will result in a ValueError being raised.
 
@@ -176,7 +176,7 @@ Override bindings is extremely useful when testing, as any part of your stack ca
 
 
 Using the decorators
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 One of the advantages of using Zanna over other solutions is that it doesn't force you
 to pollute your code by mixing in the injection logic.
