@@ -140,6 +140,7 @@ Override existing bindings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Bindings can be overridden. Overriding a non-existent binding will result in a ValueError being raised.
+
 Override bindings is extremely useful when testing, as any part of your stack can be replaced with a mock.
 
 
@@ -174,12 +175,61 @@ Override bindings is extremely useful when testing, as any part of your stack ca
     assert injector.get_instance(ValueConsumer).value.retrieve_something() == ['mock']
 
 
+Using the decorators
+~~~~~~~~~~~~~~~~~~~~
+
+One of the advantages of using Zanna over other solutions is that it doesn't force you
+to pollute your code by mixing in the injection logic.
+
+If you are working on a small project and would like to handle part (or all) of the
+injection logic using decorators instead of modules, Zanna supports that as well.
+
+Internally, Zanna creates a module that sets up the bindings as indicated by the decorators
+(in a random order).
+
+All Injectors initialized with use_decorators=True will run that module first on their Binder.
+
+Zanna supports the following decorators:
+
+* decorators.provider, which takes a provided annotated with an appropriate return type
+* decorators.provider_for, which can be given the name or the class of the instance provided
+* decorators.inject, to annotate class to be bound/injected
+
+Here's an example:
+
+..  code-block:: python
+
+    from zanna import Injector
+    from zanna import decorators
+    class Thing:
+        pass
+
+    @decorators.provider_for("value")
+    def provide_value():
+        return 3
+
+    @decorators.provider
+    def provide_thing() -> Thing:
+        return Thing()
+
+
+    @decorators.inject
+    class OtherThing:
+        def __init__(self, value, thing:Thing):
+            self.value = value
+            self.thing = thing
+
+    inj = Injector(use_decorators=True)
+    otherthing = inj.get_instance(OtherThing)
+    assert otherthing.value == 3
+    assert isinstance(otherthing.thing, Thing)
+    assert isinstance(otherthing, OtherThing)
 
 
 TODO
 ----
 
-* Override bindings method
+* Singleton
 
 Credits
 -------
