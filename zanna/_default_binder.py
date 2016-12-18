@@ -20,7 +20,7 @@ class _DefaultBinder(Binder):
 
     def bind(self, klass: type) -> None:
         self._verify_is_class(klass)
-        self._add_binding(klass, klass)
+        self.bind_to(klass, klass)
 
     def bind_to(self,
                 class_or_string: Union[type, str],
@@ -36,10 +36,11 @@ class _DefaultBinder(Binder):
 
         else:
             self._verify_is_callable(callable_obj)
-            self._verify_not_bound(class_string_or_callable)
-            self._bindings_dict[
-                class_string_or_callable] = ProviderBindingSpec(
-                callable_obj)
+            self._verify_is_class_or_string(class_string_or_callable,
+                                            'bind_provider')
+
+            self._add_binding_spec(class_string_or_callable,
+                                   ProviderBindingSpec(callable_obj))
 
     def get_binding(self,
                     class_or_string: Union[type, str]) -> BindingSpec:
@@ -53,9 +54,13 @@ class _DefaultBinder(Binder):
     def _add_binding(self,
                      class_or_string: Union[type, str],
                      bound_object: Any) -> None:
+        self._add_binding_spec(class_or_string, get_binding_spec(bound_object))
+
+    def _add_binding_spec(self,
+                          class_or_string: Union[type, str],
+                          binding_spec: BindingSpec):
         self._verify_not_bound(class_or_string)
-        self._bindings_dict[class_or_string] = get_binding_spec(
-            bound_object)
+        self._bindings_dict[class_or_string] = binding_spec
 
     def _verify_not_bound(self, class_or_string: Union[type, str]):
         if class_or_string in self._bindings_dict:
