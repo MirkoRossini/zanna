@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 
 from zanna._default_binder import _DefaultBinder
 from zanna._binding_spec import InstanceBindingSpec
-from zanna._class_binding_spec import ClassBindingSpec
+from zanna._singleton_class_binding_spec import SingletonClassBindingSpec
 
 
 class DummyClass():
@@ -69,11 +69,11 @@ class TestDefaultBinder(unittest.TestCase):
     def test_raises_if_not_bound(self):
         self.assertRaises(ValueError, self.binder.get_binding, "instance")
 
-    def test_can_binding_spect(self):
+    def test_correct_binding_specs_are_set_up(self):
         self.binder.bind_to("instance", [])
         self.binder.bind(DummyClass)
         assert self.binder.get_binding("instance") != []
         assert isinstance(self.binder.get_binding("instance"),
                           InstanceBindingSpec)
         assert isinstance(self.binder.get_binding(DummyClass),
-                          ClassBindingSpec)
+                          SingletonClassBindingSpec)

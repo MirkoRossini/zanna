@@ -26,9 +26,11 @@ def provider(otherthing):
     assert otherthing == OTHERTHING_VALUE
     return THING_VALUE
 
+
 def just_a_class_provider(otherthing) -> JustAClass:
     assert otherthing == OTHERTHING_VALUE
     return JustAClass()
+
 
 class TestInjector(unittest.TestCase):
     def test_init_empty(self):
@@ -93,6 +95,7 @@ class TestInjector(unittest.TestCase):
         def module(binder):
             binder.bind(ThingConsumer)
             binder.bind_to("thing", THING_VALUE)
+
         i = Injector(module)
         class_consumer = i.get_instance(ClassConsumer)
         assert isinstance(class_consumer, ClassConsumer)
@@ -128,6 +131,17 @@ class TestInjector(unittest.TestCase):
         just_a_class = i.get_instance(JustAClass)
         assert just_a_class is not None
         assert isinstance(just_a_class, JustAClass)
+
+    def test_is_singleton_by_default(self):
+        def module(binder):
+            binder.bind(JustAClass)
+
+        i = Injector(module)
+        just_a_class = i.get_instance(JustAClass)
+        assert just_a_class is not None
+        assert isinstance(just_a_class, JustAClass)
+        just_a_class_now = i.get_instance(JustAClass)
+        assert just_a_class is just_a_class_now
 
     @staticmethod
     def _called_with_binder(binder):
