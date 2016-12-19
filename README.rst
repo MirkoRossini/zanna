@@ -4,29 +4,29 @@ zanna
 
 
 .. image:: https://img.shields.io/pypi/v/zanna.svg
-:target: https://pypi.python.org/pypi/zanna
+        :target: https://pypi.python.org/pypi/zanna
 
 .. image:: https://img.shields.io/travis/MirkoRossini/zanna.svg
-:target: https://travis-ci.org/MirkoRossini/zanna
+        :target: https://travis-ci.org/MirkoRossini/zanna
 
 .. image:: https://readthedocs.org/projects/zanna/badge/?version=latest
-:target: https://zanna.readthedocs.io/en/latest/?badge=latest
+        :target: https://zanna.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
 .. image:: https://pyup.io/repos/github/mirkorossini/zanna/shield.svg
-:target: https://pyup.io/repos/github/mirkorossini/zanna/
+     :target: https://pyup.io/repos/github/mirkorossini/zanna/
      :alt: Updates
 
 .. image:: https://pyup.io/repos/github/mirkorossini/zanna/python-3-shield.svg
-:target: https://pyup.io/repos/github/mirkorossini/zanna/
+     :target: https://pyup.io/repos/github/mirkorossini/zanna/
      :alt: Python 3
 
-    Simple Dependency Injection library.
-    Supports python 3.5+ and makes full use of the typing annotations.
-    The design is pythonic but inspired by Guice in many aspects.
+Simple Dependency Injection library.
+Supports python 3.5+ and makes full use of the typing annotations.
+The design is pythonic but inspired by Guice in many aspects.
 
-    * Free software: BSD license
-    * Documentation: https://zanna.readthedocs.io.
+* Free software: BSD license
+* Documentation: https://zanna.readthedocs.io.
 
 Motivation
 ==========
