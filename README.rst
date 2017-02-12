@@ -119,7 +119,7 @@ return the same instance:
     class MyClass:
         pass
     injector = Injector(lambda binder: binder.bind(MyClass))
-    assert injector.get_instance(MyClass) == injector.get_instance(MyClass)
+    assert injector.get_instance(MyClass) is injector.get_instance(MyClass)
 
 
 
